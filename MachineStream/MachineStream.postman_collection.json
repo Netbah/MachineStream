@@ -1,0 +1,116 @@
+{
+	"info": {
+		"_postman_id": "a1c35cdd-36c3-4a76-af22-dc084e673011",
+		"name": "Machine Stream",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get machines",
+			"protocolProfileBehavior": {
+				"strictSSL": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5001/api/v1/machines?machineType=microscope&count=1&status=finished",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"v1",
+						"machines"
+					],
+					"query": [
+						{
+							"key": "machineType",
+							"value": "microscope"
+						},
+						{
+							"key": "count",
+							"value": "1"
+						},
+						{
+							"key": "status",
+							"value": "finished"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get machine by id",
+			"protocolProfileBehavior": {
+				"strictSSL": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5001/api/v1/machines/653cab7e-03e7-47ce-b73f-4694e7093729?countEvents=10",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"v1",
+						"machines",
+						"653cab7e-03e7-47ce-b73f-4694e7093729"
+					],
+					"query": [
+						{
+							"key": "countEvents",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get events",
+			"protocolProfileBehavior": {
+				"strictSSL": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5001/api/v1/events?status=errored&machineId=759c98a4-b66f-4799-b278-bab8aec881a0&count=10",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"v1",
+						"events"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "errored"
+						},
+						{
+							"key": "machineId",
+							"value": "759c98a4-b66f-4799-b278-bab8aec881a0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
