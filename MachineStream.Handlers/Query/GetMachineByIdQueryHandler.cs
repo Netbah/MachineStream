@@ -1,6 +1,7 @@
 namespace MachineStream.Handlers.Query
 {
     using AutoMapper;
+    using Data.DomainExceptions;
     using Data.Repository;
     using Domain.Entities;
     using Domain.Model;
@@ -32,6 +33,10 @@ namespace MachineStream.Handlers.Query
         public async Task<MachineExtendedModel> Handle(GetMachineByIdQuery request, CancellationToken cancellationToken)
         {
             var machine = await _machineRepository.GetMachineByIdAsync(request.Id, cancellationToken);
+            if (machine == null)
+            {
+                throw new NotFoundException($"Machine with id: {request.Id} not found!");
+            }
             var machineExtended = _mapper.Map<MachineExtendedModel>(machine);
            
             Expression<Func<EventEntity, bool>> filter = i => i.MachineId == request.Id;

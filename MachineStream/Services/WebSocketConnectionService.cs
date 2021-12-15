@@ -20,24 +20,18 @@ namespace MachineStream.Services
     {
         private readonly ILogger<WebSocketConnectionService> _logger;
         private readonly IOptions<MachineStreamConfiguration> _config;
-        private readonly IMapper _mapper;
         private readonly IMediator _mediator;
         private readonly ManualResetEvent ExitEvent = new(false);
-        private readonly IServiceScopeFactory _serviceScopeFactory;
 
 
         public WebSocketConnectionService(
             ILogger<WebSocketConnectionService> logger,
             IOptions<MachineStreamConfiguration> config,
-            IMapper mapper,
-            IMediator mediator,
-            IServiceScopeFactory serviceScopeFactory)
+            IMediator mediator)
         {
             _logger = logger;
             _config = config;
-            _mapper = mapper;
             _mediator = mediator;
-            _serviceScopeFactory = serviceScopeFactory;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -74,9 +68,7 @@ namespace MachineStream.Services
                             MachineEventModel = machineEvent
                         };
                         
-                        var scope = _serviceScopeFactory.CreateScope();
-                        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-                        await mediator.Send(command);
+                        await _mediator.Send(command);
                     }
                     catch (Exception exception)
                     {

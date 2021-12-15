@@ -40,23 +40,17 @@
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(List<MachineResponse>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<MachineResponse>>> GetMachines([FromQuery] string status, string machineType, int count = 100)
+        public async Task<ActionResult<List<MachineResponse>>> GetMachines([FromQuery] string status,
+            string machineType, int count = 100)
         {
-            try
+            var query = new GetMachinesQuery
             {
-                var query = new GetMachinesQuery
-                {
-                    Status = status,
-                    MachineType = machineType,
-                    Count = count
-                };
-                var machines = await _mediator.Send(query);
-                return _mapper.Map<List<MachineResponse>>(machines);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+                Status = status,
+                MachineType = machineType,
+                Count = count
+            };
+            var machines = await _mediator.Send(query);
+            return _mapper.Map<List<MachineResponse>>(machines);
         }
 
         /// <summary>
@@ -70,27 +64,16 @@
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<MachineExtendedResponse>> GetMachineById([Required] string id, [FromQuery] int countEvents = 100)
+        public async Task<ActionResult<MachineExtendedResponse>> GetMachineById([Required] string id,
+            [FromQuery] int countEvents = 100)
         {
-            if (!ModelState.IsValid)
+            var query = new GetMachineByIdQuery()
             {
-                return BadRequest(ModelState);
-            }
-            
-            try
-            {
-                var query = new GetMachineByIdQuery()
-                {
-                    Id = new Guid(id),
-                    CountEvents = countEvents
-                };
-                var machineExtended = await _mediator.Send(query);
-                return _mapper.Map<MachineExtendedResponse>(machineExtended);
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+                Id = new Guid(id),
+                CountEvents = countEvents
+            };
+            var machineExtended = await _mediator.Send(query);
+            return _mapper.Map<MachineExtendedResponse>(machineExtended);
         }
     }
 }

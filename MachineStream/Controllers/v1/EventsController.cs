@@ -38,24 +38,17 @@
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(List<EventExtendedResponse>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<EventExtendedResponse>>> GetEvents([FromQuery] string status, string machineId, int count = 100)
+        public async Task<ActionResult<List<EventExtendedResponse>>> GetEvents([FromQuery] string status,
+            string machineId, int count = 100)
         {
-            try
+            var query = new GetEventsQuery
             {
-                var query = new GetEventsQuery
-                {
-                    Status = status,
-                    MachineId = machineId,
-                    Count = count
-                };
-                var events = await _mediator.Send(query);
-                return _mapper.Map<List<EventExtendedResponse>>(events);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+                Status = status,
+                MachineId = machineId,
+                Count = count
+            };
+            var events = await _mediator.Send(query);
+            return _mapper.Map<List<EventExtendedResponse>>(events);
         }
-        
     }
 }

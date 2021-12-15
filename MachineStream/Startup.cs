@@ -13,6 +13,7 @@ namespace MachineStream
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.OpenApi.Models;
+    using Middleware;
     using System.IO;
 
     public class Startup
@@ -29,7 +30,7 @@ namespace MachineStream
         {
             services
                 .AddControllers()
-                .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                .AddNewtonsoftJson();
             
             services.AddHostedService<WebSocketConnectionService>();
             services.AddMediatR(AppDomain.CurrentDomain.Load("MachineStream.Handlers"));
@@ -50,14 +51,11 @@ namespace MachineStream
             }
             else
             {
-                var options = new DbContextOptionsBuilder<MachineContext>()
-                    .UseInMemoryDatabase(databaseName: "MachineDatabase")
-                    .Options;
+                var options = new DbContextOptionsBuilder<MachineContext>().Options;
                 services.AddSingleton(x => new MachineContext(options));
                 services.AddDbContext<MachineContext>(options =>
                 {
                     options.UseSqlServer(Configuration.GetConnectionString("MachineDatabase"));
-                    
                 });
             }
             
@@ -81,6 +79,10 @@ namespace MachineStream
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
+            
+            // global error handler
+            app.UseMiddleware<ErrorHandlerMiddleware>();
+            
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
